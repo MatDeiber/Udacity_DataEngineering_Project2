@@ -19,6 +19,7 @@ def insert_tables(cur, conn):
     Function to populate the fact and dimension tables
     '''
     for query in insert_table_queries:
+        print(query)
         cur.execute(query)
         conn.commit()
 

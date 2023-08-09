@@ -50,7 +50,7 @@ staging_events_table_create= ("""
 
 staging_songs_table_create = ("""
     CREATE TABLE IF NOT EXISTS staging_songs (
-    song_id             VARCHAR    NULL,
+    song_id             VARCHAR     NULL,
     num_songs           INTEGER    NULL,
     title               VARCHAR    NULL,
     artist_name         VARCHAR    NULL,
@@ -126,13 +126,13 @@ staging_events_copy = ("""
 """).format(LOG_DATA, ARN, LOG_JSONPATH)
 
 staging_songs_copy = ("""
-    COPY staging_songs FROM {} CREDENTIALS 'aws_iam_role={}' FORMAT AS JSON 'auto' compupdate off region 'us-west-2';
+    COPY staging_songs FROM {} CREDENTIALS 'aws_iam_role={}' FORMAT AS JSON 'auto' REGION 'us-west-2';
 """).format(SONG_DATA, ARN)
 
 # FINAL TABLES
 # The following queries are used to insert the data from the staging tables to the final tables
 songplay_table_insert = ("""
-    INSERT INTO songplays (songplay_id,
+    INSERT INTO songplays (
                            start_time,
                            user_id,
                            level,
@@ -141,7 +141,7 @@ songplay_table_insert = ("""
                            session_id,
                            location,
                            user_agent)
-        SELECT  se.itemInSession  AS songplay_id,
+        SELECT  
                 se.ts             AS start_time,
                 se.userId         AS user_id,
                 se.level          AS level,
